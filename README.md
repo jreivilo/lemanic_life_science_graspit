@@ -1,14 +1,10 @@
-# Setup
+# Get started
+* Make sure you have uv package manager install https://docs.astral.sh/uv/getting-started/installation/
+* Download the infrared camera python SDK: `git submodule update --init --recursive`
+* Run `uv sync` to install everything
+* Run `uv hello.py`
 
-## Install Dependencies
-
-First, install [`uv`](https://github.com/astral-sh/uv):
-
-```bash
-brew install uv
-# or
-pip install uv
-```
+# Hardware list
 
 Then sync the environment:
 
