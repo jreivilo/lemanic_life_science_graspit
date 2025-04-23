@@ -19,3 +19,7 @@ You can now run your Python scripts using `uv`:
 ```bash
 uv run hello.py
 ```
+
+## Presentation
+
+You can find the project presentation [here](https://docs.google.com/presentation/d/1FUNqiFJ39EkLV5rfUrAoHw7q_zYO9hKmV6gN2FOVpAs/edit?usp=sharing).
