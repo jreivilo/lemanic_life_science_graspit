@@ -1,7 +1,8 @@
-from typing import TypedDict
 import numpy as np
+from dataclasses import dataclass
 
-class HandPose(TypedDict):
+@dataclass
+class HandPose:
     timestamp_ms: int
     grasp_angle: float
     # wrist_orientation: np.array

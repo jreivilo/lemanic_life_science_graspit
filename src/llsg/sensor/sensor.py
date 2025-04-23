@@ -3,6 +3,7 @@ import leap
 import json
 import numpy as np
 import paho.mqtt.client as mqtt
+from dataclasses import asdict
 from data_structure import HandPose
 
 client = mqtt.Client()
@@ -36,9 +37,9 @@ def quaternion_difference(q1, q2):
 
 # hand = Hand object from the Leap API
 def send_data(hand):
-    handPose: HandPose = {}
-    handPose["timestamp"] = int(time.time() * 1000)
-    handPose["grab_angle"] = hand.grab_angle
+    handPose = HandPose(timestamp_ms=0, grasp_angle=0.0)
+    handPose.timestamp_ms = int(time.time() * 1000)
+    handPose.grasp_angle = hand.grab_angle
 
     # # Add orientation of the wrist
     # q1 = hand.palm.orientation
@@ -69,11 +70,13 @@ def send_data(hand):
     #         handPose["digits"][i].append(qdiff)
 
     # Send data to the server
-    client.publish("/infrared_camera", json.dumps(handPose))
+    client.publish("/sensor", json.dumps(asdict(handPose)))
+    print(handPose)
 
 class MyListener(leap.Listener):
     def on_connection_event(self, event):
         print("Connected")
+        self.prev = time.time()
 
     def on_device_event(self, event):
         try:
@@ -85,10 +88,11 @@ class MyListener(leap.Listener):
         print(f"Found device {info.serial}")
 
     def on_tracking_event(self, event):
-
+        if time.time() - self.prev < 0.1:
+            return
+        self.prev = time.time()
         for hand in event.hands:
-            handPose = send_data(hand)
-            print(handPose)
+            send_data(hand)
 
 
 def main():

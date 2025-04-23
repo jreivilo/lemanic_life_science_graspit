@@ -1,1 +1,1 @@
-SERIAL_PORT = "COM3"
+SERIAL_PORT = "/dev/ttyUSB0"  # Example serial port for FES device
