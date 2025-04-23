@@ -5,7 +5,6 @@ import numpy as np
 
 from data_structure import HandPose
 
-
 def quaternion_conjugate(q):
     """Returns the conjugate of a quaternion."""
     w, x, y, z = q
