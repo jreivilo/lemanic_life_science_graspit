@@ -22,8 +22,8 @@ class Stimulator:
         
         # Command to channel mapping
         self.command_channel_map = {
-            "grasp": 0,  # Channel 1 (index 0)
-            "pinch": 2   # Channel 3 (index 2)
+            "grasp": [0, 3],  # Channel 1 (index 0)
+            "release": [2]   # Channel 3 (index 2)
         }
         
         # Current active command
@@ -43,8 +43,11 @@ class Stimulator:
         stim_code = [0, 0, 0, 0, 0, 0, 0, 0]
         
         # Set the intensity for the appropriate channel
-        channel = self.command_channel_map.get(command, 0)
-        stim_code[channel] = int(intensity)
+        channels = self.command_channel_map.get(command, 0)
+        for channel in channels:
+            if channel == 3:
+                intensity = min(3, intensity)
+            stim_code[channel] = int(intensity)
         
         # Apply stimulation
         self.stim.UpdateChannelSettings(stim_code)
@@ -58,7 +61,7 @@ class Stimulator:
         self.previous_intensity = intensity
         
         # Ensure intensity is within valid range
-        intensity = max(0, min(10, intensity)) # mA
+        intensity = max(0, min(7, intensity)) # mA
         logger.info(f'Calculated stimulation intensity: {intensity} for error: {error}')
         
         return intensity
@@ -69,7 +72,7 @@ class Stimulator:
             self.active_command = "grasp"
             logger.info("Command received: grasp - Setting objective angle to 3.14")
         elif command == "release":
-            self.objective_angle = 0.0
+            self.objective_angle = 0.2
             self.active_command = "release"
             logger.info("Command received: release - Setting objective angle to 0.0")
         elif command == "pinch":
@@ -78,9 +81,10 @@ class Stimulator:
             logger.info("Command received: pinch - Setting objective angle to 1.57")
         
     def update_sensor_reading(self, angle, timestamp):
-        if timestamp - self.previous_angle_timestamp < 1000:
+        if timestamp - self.previous_angle_timestamp < 100:
             # Ignore readings that are too close together
             return
+
         self.previous_angle_timestamp = timestamp
         self.current_angle = angle
         
