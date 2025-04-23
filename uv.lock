@@ -84,6 +84,17 @@ version = "0.0.1"
 source = { directory = "leapc-python-bindings/leapc-python-api" }
 
 [[package]]
+name = "leapc-cffi"
+version = "0.0.1"
+source = { directory = "leapc-python-bindings/leapc-cffi" }
+dependencies = [
+    { name = "cffi" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "cffi" }]
+
+[[package]]
 name = "lemanic-life-science-graspit"
 version = "0.1.0"
 source = { virtual = "." }
@@ -91,6 +102,7 @@ dependencies = [
     { name = "build" },
     { name = "cffi" },
     { name = "leap" },
+    { name = "leapc-cffi" },
     { name = "numpy" },
     { name = "opencv-python" },
 ]
@@ -100,6 +112,7 @@ requires-dist = [
     { name = "build", specifier = ">=1.2.2.post1" },
     { name = "cffi", specifier = ">=1.17.1" },
     { name = "leap", directory = "leapc-python-bindings/leapc-python-api" },
+    { name = "leapc-cffi", directory = "leapc-python-bindings/leapc-cffi" },
     { name = "numpy", specifier = ">=2.2.5" },
     { name = "opencv-python", specifier = ">=4.11.0.86" },
 ]

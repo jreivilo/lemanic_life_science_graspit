@@ -8,9 +8,11 @@ dependencies = [
     "build>=1.2.2.post1",
     "cffi>=1.17.1",
     "leap",
+    "leapc-cffi",
     "numpy>=2.2.5",
     "opencv-python>=4.11.0.86",
 ]
 
 [tool.uv.sources]
 leap = { path = "leapc-python-bindings/leapc-python-api" }
+leapc-cffi = { path = "leapc-python-bindings/leapc-cffi" }
