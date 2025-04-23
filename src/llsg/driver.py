@@ -4,9 +4,6 @@ import serial
 import numpy as np
 
 class Motionstim8:
-
-
-
     def __init__(self):
 
         # The Motionstim8 device has a serial port

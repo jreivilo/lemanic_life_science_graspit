@@ -1,36 +1,36 @@
-from __future__ import print_function, division
-import llsg.utils.time as qc
-import cv2
-import numpy as np
 import time
-import serial
-import serial.tools.list_ports
 import llsg.driver as fes
 from llsg import logger
+import llsg.config as config
+
+class Stimulator():
+
+    def __init__(self):
+        self.stim: fes.Motionstim8 = fes.Motionstim8()
+        self.stim.OpenSerialPort(config.SERIAL_PORT)
+        self.stim.InitializeChannelListMode()
+        logger.info('Opened FES serial port')
+    
+    def __del__(self):
+        stim_code = [0, 0, 0, 0, 0, 0, 0, 0]
+        self.stim.UpdateChannelSettings(stim_code)
+        self.stim.CloseSerialPort()
+        logger.info('Closed FES serial port')
+
+    def stimulate(self):
+        stim_code = [0, 10, 0, 0, 0, 0, 0, 0]
+        self.stim.UpdateChannelSettings(stim_code)
+        logger.info('FES: Sent Left')
+        time.sleep(1)
+        stim_code = [0, 0, 0, 0, 0, 0, 0, 0]
+        self.stim.UpdateChannelSettings(stim_code)
 
 if __name__ == '__main__':
+
+    logger.info('Starting FES stimulation example')
     # Initialize the FES device
-    fes_device = fes.Motionstim8()
+    stimulator = Stimulator()
+    # Start the stimulation
+    stimulator.stimulate() 
 
-    # Open the serial port
-    fes_device.OpenSerialPort('COM3')
-
-    # Set the stimulation frequency
-    fes_device.SetStimulationFrequency(20)
-
-    # Set the pulse width and amplitude for each channel
-    for i in range(fes_device.nChannels):
-        fes_device.SetPulseWidth(i, 300)
-        fes_device.SetAmplitude(i, 0)
-
-    # Start stimulation
-    fes_device.StartStimulation()
-
-    # Wait for a while to observe the stimulation
-    time.sleep(10)
-
-    # Stop stimulation
-    fes_device.StopStimulation()
-
-    # Close the serial port
-    fes_device.CloseSerialPort()
+    del stimulator
