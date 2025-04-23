@@ -11,6 +11,7 @@ dependencies = [
     "matplotlib>=3.10.1",
     "numpy>=2.2.5",
     "opencv-python>=4.11.0.86",
+    "paho-mqtt>=2.1.0",
     "pandas>=2.2.3",
     "pyserial>=3.5",
     "scikit-learn>=1.6.1",
