@@ -1,15 +1,16 @@
 import time
-
 import leap
+import json
 import numpy as np
-
+import paho.mqtt.client as mqtt
 from data_structure import HandPose
+
+client = mqtt.Client()
 
 def quaternion_conjugate(q):
     """Returns the conjugate of a quaternion."""
     w, x, y, z = q
     return np.array([w, -x, -y, -z])
-
 
 def quaternion_multiply(q1, q2):
     """Multiplies two quaternions."""
@@ -24,7 +25,6 @@ def quaternion_multiply(q1, q2):
         ]
     )
 
-
 def quaternion_difference(q1, q2):
     """
     Returns the relative rotation (difference) quaternion q_diff such that:
@@ -33,7 +33,6 @@ def quaternion_difference(q1, q2):
     """
     q1_conj = quaternion_conjugate(q1)
     return quaternion_multiply(q2, q1_conj)
-
 
 # hand = Hand object from the Leap API
 def send_data(hand):
@@ -58,8 +57,7 @@ def send_data(hand):
     #         # Maybe only get a euler angle instead of 4 values of the quaternion ?
     #         handPose["digits"][i].append(qdiff)
 
-    return handPose
-
+    client.publish("/infrared_camera", json.dumps(handPose))
 
 class MyListener(leap.Listener):
     def on_connection_event(self, event):
@@ -82,6 +80,9 @@ class MyListener(leap.Listener):
 
 
 def main():
+    # Init connection to MQTT server
+    client.connect("cluster.jolivier.ch", 1883, 60)
+
     my_listener = MyListener()
 
     connection = leap.Connection()
@@ -93,7 +94,8 @@ def main():
         connection.set_tracking_mode(leap.TrackingMode.Desktop)
         while running:
             time.sleep(1)
-
+    
+    client.disconnect()
 
 if __name__ == "__main__":
     main()
