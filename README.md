@@ -22,4 +22,4 @@ uv run hello.py
 
 ## Presentation
 
-You can find the project presentation [here](https://docs.google.com/presentation/d/1FUNqiFJ39EkLV5rfUrAoHw7q_zYO9hKmV6gN2FOVpAs/edit?usp=sharing).
+You can find the project presentation [here](https://docs.google.com/presentation/d/1YEtW47rBTa9S73A4l6LQ9Tdh1YrbPj_eL7_1DmbkJ4Q/edit?usp=sharing).
