@@ -3,13 +3,14 @@
 * Make sure you have uv package manager install https://docs.astral.sh/uv/getting-started/installation/
 * Download the infrared camera python SDK: `git submodule update --init --recursive`
 * Run `uv sync` to install all python packages
-* Start the program with uv run
-    * For the infrared camera sensor, run `uv run src/sensor/sensor.py`
-    * For the FES, run `uv run src/llsg/example_stimulation.py`
+* Our software is composed of 3 nodes
+    * The infrared camera sensor. Run it with `uv run src/llsg/sensor/sensor.py`
+    * The vocal detection. Run it with `uv run src/llsg/commander/vocal.py`
+    * The stimulator to send current commands to the FES. Run it with `uv run src/llsg/stimulator/stimulator.py`
 
 # Hardware list
 * Leap Motion Controller
-* todo
+* FES
 
 # Presentation
 
