@@ -1,3 +1,7 @@
+brew install uv or pip install uv
+
+then uv sync
+uv run hello.py
 # Setup
 
 Download the infrared camera python SDK: `git sumbodule update --recrusive`
