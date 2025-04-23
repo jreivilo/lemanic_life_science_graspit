@@ -1,17 +1,34 @@
 [project]
-name = "lemanic-life-science-graspit"
+name = "llsg"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "ipykernel>=6.29.5",
+    "ipywidgets>=8.1.6",
+    "jupyterlab>=4.4.1",
+    "matplotlib>=3.10.1",
+    "numpy>=2.2.5",
+    "opencv-python>=4.11.0.86",
+    "paho-mqtt>=2.1.0",
+    "pandas>=2.2.3",
+    "pyserial>=3.5",
+    "scikit-learn>=1.6.1",
+    "scipy>=1.15.2",
+    "seaborn>=0.13.2",
+    "statsmodels>=0.14.4",
+    "tqdm>=4.67.1",
     "build>=1.2.2.post1",
     "cffi>=1.17.1",
     "leap",
     "leapc-cffi",
-    "numpy>=2.2.5",
     "opencv-python>=4.11.0.86",
 ]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.uv.sources]
 leap = { path = "leapc-python-bindings/leapc-python-api" }
