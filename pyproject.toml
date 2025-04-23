@@ -4,7 +4,21 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "ipykernel>=6.29.5",
+    "ipywidgets>=8.1.6",
+    "jupyterlab>=4.4.1",
+    "matplotlib>=3.10.1",
+    "numpy>=2.2.5",
+    "opencv-python>=4.11.0.86",
+    "pandas>=2.2.3",
+    "pyserial>=3.5",
+    "scikit-learn>=1.6.1",
+    "scipy>=1.15.2",
+    "seaborn>=0.13.2",
+    "statsmodels>=0.14.4",
+    "tqdm>=4.67.1",
+]
 
 [build-system]
 requires = ["hatchling"]
