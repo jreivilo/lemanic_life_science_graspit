@@ -4,7 +4,7 @@ then uv sync
 uv run hello.py
 # Setup
 
-Download the infrared camera python SDK: `git sumbodule update --recrusive`
+Download the infrared camera python SDK: `git submodule update --init --recursive`
 
 ## Setup infrared camera
 * `cd leapc-python-bindings`
