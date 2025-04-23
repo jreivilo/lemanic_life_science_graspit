@@ -4,4 +4,9 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "build>=1.2.2.post1",
+    "cffi>=1.17.1",
+    "numpy>=2.2.5",
+    "opencv-python>=4.11.0.86",
+]
