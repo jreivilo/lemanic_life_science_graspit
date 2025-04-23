@@ -39,14 +39,25 @@ def send_data(hand):
     handPose: HandPose = {}
     handPose["timestamp"] = int(time.time() * 1000)
     handPose["grab_angle"] = hand.grab_angle
-    # handPose["digits"] = []
 
-    # # Send the data to the server
-    # # Maybe later
+    # # Add orientation of the wrist
+    # q1 = hand.palm.orientation
+    # q2 = hand.arm.rotation
+    # qdiff = quaternion_difference(q1, q2)
+    # handPose["wrist_orientation"] = qdiff
+    #
+    # handPose["digits"] = []
     # # Iterate every fingers
     # for i in range(len(hand.digits)):
     #     print(f"digit {i}")
     #     handPose["digits"].append([])
+    #     
+    #     # Add first orientation of the first bone of the finger
+    #     q1 = hand.palm.orientation
+    #     q2 = hand.digits[i].bones[0].rotation
+    #     qdiff = quaternion_difference(q1, q2)
+    #     handPose["digits"][i].append(qdiff)
+    #
     #     # Iterate every bones of the finger
     #     for j in range(len(hand.digits[i].bones) - 1):
     #         print(f"joint {j}")
@@ -57,6 +68,7 @@ def send_data(hand):
     #         # Maybe only get a euler angle instead of 4 values of the quaternion ?
     #         handPose["digits"][i].append(qdiff)
 
+    # Send data to the server
     client.publish("/infrared_camera", json.dumps(handPose))
 
 class MyListener(leap.Listener):
