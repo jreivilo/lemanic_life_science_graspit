@@ -30,6 +30,8 @@ class Motionstim8:
         # The device amplitudes
         self.amplitudes = [0] * self.nChannels
 
+        self.max_amplitude = 10
+
 
 
 
@@ -133,9 +135,9 @@ class Motionstim8:
         # Ensure that the device amplitudes are capped between the safety bounds 0 - 50 mA
         for index, amplitude in enumerate(newAmplitudes):
 
-            if amplitude > 50:
+            if amplitude > self.max_amplitude:
 
-                self.amplitudes[index] = 50
+                self.amplitudes[index] = self.max_amplitude
 
             elif amplitude < 0:
 
