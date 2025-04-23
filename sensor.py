@@ -1,23 +1,30 @@
-import numpy as np
-import leap
 import time
+
+import leap
+import numpy as np
+
 from data_structure import HandPose
+
 
 def quaternion_conjugate(q):
     """Returns the conjugate of a quaternion."""
     w, x, y, z = q
     return np.array([w, -x, -y, -z])
 
+
 def quaternion_multiply(q1, q2):
     """Multiplies two quaternions."""
     w1, x1, y1, z1 = q1
     w2, x2, y2, z2 = q2
-    return np.array([
-        w1*w2 - x1*x2 - y1*y2 - z1*z2,
-        w1*x2 + x1*w2 + y1*z2 - z1*y2,
-        w1*y2 - x1*z2 + y1*w2 + z1*x2,
-        w1*z2 + x1*y2 - y1*x2 + z1*w2
-    ])
+    return np.array(
+        [
+            w1 * w2 - x1 * x2 - y1 * y2 - z1 * z2,
+            w1 * x2 + x1 * w2 + y1 * z2 - z1 * y2,
+            w1 * y2 - x1 * z2 + y1 * w2 + z1 * x2,
+            w1 * z2 + x1 * y2 - y1 * x2 + z1 * w2,
+        ]
+    )
+
 
 def quaternion_difference(q1, q2):
     """
@@ -28,30 +35,32 @@ def quaternion_difference(q1, q2):
     q1_conj = quaternion_conjugate(q1)
     return quaternion_multiply(q2, q1_conj)
 
+
 # hand = Hand object from the Leap API
 def send_data(hand):
-    handPose = HandPose()
-    handPose.timestamp = int(time.time() * 1000)
-    handPose.grab_angle = hand.grab_angle
+    handPose: HandPose = {}
+    handPose["timestamp"] = int(time.time() * 1000)
+    handPose["grab_angle"] = hand.grab_angle
+    # handPose["digits"] = []
 
-    # Send the data to the server
-    
-    # Maybe later
-    """
-    # Iterate every fingers
-    for i in range(len(hand.digits) - 1):
-        # Iterate every bones of the finger
-        for j in range(len(hand.digits[i].bones) - 1):
-            q1 = hand.digits[i].bones[j].rotation
-            q2 = hand.digits[i].bones[j - 1].rotation
-            qdiff = quaternion_difference(q1, q1)
+    # # Send the data to the server
+    # # Maybe later
+    # # Iterate every fingers
+    # for i in range(len(hand.digits)):
+    #     print(f"digit {i}")
+    #     handPose["digits"].append([])
+    #     # Iterate every bones of the finger
+    #     for j in range(len(hand.digits[i].bones) - 1):
+    #         print(f"joint {j}")
+    #         q1 = hand.digits[i].bones[j].rotation
+    #         q2 = hand.digits[i].bones[j + 1].rotation
+    #         qdiff = quaternion_difference(q1, q2)
 
-            # Maybe only get a euler angle instead of 4 values of the quaternion ?
-            handPose.append(qdiff.w)
-            handPose.append(qdiff.x)
-            handPose.append(qdiff.y)
-            handPose.append(qdiff.z)
-    """
+    #         # Maybe only get a euler angle instead of 4 values of the quaternion ?
+    #         handPose["digits"][i].append(qdiff)
+
+    return handPose
+
 
 class MyListener(leap.Listener):
     def on_connection_event(self, event):
@@ -67,11 +76,14 @@ class MyListener(leap.Listener):
         print(f"Found device {info.serial}")
 
     def on_tracking_event(self, event):
+
         for hand in event.hands:
-            send_data(hand)
+            handPose = send_data(hand)
+            print(handPose)
+
 
 def main():
-    myListener = MyListener()
+    my_listener = MyListener()
 
     connection = leap.Connection()
     connection.add_listener(my_listener)
@@ -82,6 +94,7 @@ def main():
         connection.set_tracking_mode(leap.TrackingMode.Desktop)
         while running:
             time.sleep(1)
+
 
 if __name__ == "__main__":
     main()
