@@ -1,4 +1,5 @@
 # Get started
+* Install driver for the leap motion controller: `https://leap2.ultraleap.com/downloads/leap-motion-controller/`
 * Make sure you have uv package manager install https://docs.astral.sh/uv/getting-started/installation/
 * Download the infrared camera python SDK: `git submodule update --init --recursive`
 * Run `uv sync` to install all python packages
@@ -6,6 +7,10 @@
     * For the infrared camera sensor, run `uv run src/sensor/sensor.py`
     * For the FES, run `uv run src/llsg/example_stimulation.py`
 
-## Presentation
+# Hardware list
+* Leap Motion Controller
+* todo
+
+# Presentation
 
 You can find the project presentation [here](https://docs.google.com/presentation/d/1FUNqiFJ39EkLV5rfUrAoHw7q_zYO9hKmV6gN2FOVpAs/edit?usp=sharing).
