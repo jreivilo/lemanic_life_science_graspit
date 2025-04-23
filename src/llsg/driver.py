@@ -10,10 +10,10 @@ class Motionstim8:
         self.serialPort = serial.Serial()
 
         # The default main stimulation frequency being used is 20 Hz
-        self.stimulationFrequency = 50
+        self.stimulationFrequency = 35
 
         # The default group stimulation frequency being used is 50 Hz
-        self.groupStimulationFrequency = 50
+        self.groupStimulationFrequency = 35
 
         # Set the N factor (0 by default)
         self.nFactor = 0
@@ -25,7 +25,7 @@ class Motionstim8:
         self.pulseModes = [0] * self.nChannels
 
         # The device pulse widths
-        self.pulseWidths = [300] * self.nChannels
+        self.pulseWidths = [250] * self.nChannels
 
         # The device amplitudes
         self.amplitudes = [0] * self.nChannels

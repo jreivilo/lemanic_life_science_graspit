@@ -16,8 +16,10 @@ dependencies = [
     "scikit-learn>=1.6.1",
     "scipy>=1.15.2",
     "seaborn>=0.13.2",
+    "sounddevice==0.4.6",
     "statsmodels>=0.14.4",
     "tqdm>=4.67.1",
+    "vosk==0.3.45",
 ]
 
 [build-system]
