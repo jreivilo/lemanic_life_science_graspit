@@ -1,17 +1,10 @@
-brew install uv or pip install uv
+# Get started
+* Make sure you have uv package manager install https://docs.astral.sh/uv/getting-started/installation/
+* Download the infrared camera python SDK: `git submodule update --init --recursive`
+* Run `uv sync` to install everything
+* Run `uv hello.py`
 
-then uv sync
-uv run hello.py
-# Setup
-
-Download the infrared camera python SDK: `git submodule update --init --recursive`
-
-## Setup infrared camera
-* `cd leapc-python-bindings`
-* `uv pip install -r requirements.txt`
-* `uv pip install -e leapc-python-api`
-
-# Hardware
+# Hardware list
 
 ## Infrared camera sensor
 ==== Device 2 ====
