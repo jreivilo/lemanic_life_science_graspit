@@ -11,7 +11,29 @@ services:
       - ./config:/mosquitto/config:rw
       - ./data:/mosquitto/data:rw
       - ./log:/mosquitto/log:rw
-    restart: unless-stopped
+  
+  commander:
+    build: .
+    depends_on:
+      - mqtt5
+    command: ["uv", "run", "/app/src/llsg/commander/audio.py"]
+    devices:
+      - "/dev/snd:/dev/snd"
+    container_name: commander
+  
+  sensor:
+    build: .
+    depends_on:
+      - mqtt5
+    command: ["uv", "run", "/app/src/llsg/sensor/sensor.py"]
+    container_name: sensor
+  
+  stimulator:
+    build: .
+    depends_on:
+      - mqtt5
+    command: ["uv", "run", "/app/src/llsg/stimulator/stimulator.py"]
+    container_name: stimulator
 
 # volumes for mapping data,config and log
 volumes:
