@@ -1,17 +1,21 @@
-import time
-import leap
 import json
+import time
+from dataclasses import asdict
+
+import leap
 import numpy as np
 import paho.mqtt.client as mqtt
-from dataclasses import asdict
-from data_structure import HandPose
+
+from llsg.data_structure import HandPose
 
 client = mqtt.Client()
+
 
 def quaternion_conjugate(q):
     """Returns the conjugate of a quaternion."""
     w, x, y, z = q
     return np.array([w, -x, -y, -z])
+
 
 def quaternion_multiply(q1, q2):
     """Multiplies two quaternions."""
@@ -26,6 +30,7 @@ def quaternion_multiply(q1, q2):
         ]
     )
 
+
 def quaternion_difference(q1, q2):
     """
     Returns the relative rotation (difference) quaternion q_diff such that:
@@ -34,6 +39,7 @@ def quaternion_difference(q1, q2):
     """
     q1_conj = quaternion_conjugate(q1)
     return quaternion_multiply(q2, q1_conj)
+
 
 # hand = Hand object from the Leap API
 def send_data(hand):
@@ -52,7 +58,7 @@ def send_data(hand):
     # for i in range(len(hand.digits)):
     #     print(f"digit {i}")
     #     handPose["digits"].append([])
-    #     
+    #
     #     # Add first orientation of the first bone of the finger
     #     q1 = hand.palm.orientation
     #     q2 = hand.digits[i].bones[0].rotation
@@ -72,6 +78,7 @@ def send_data(hand):
     # Send data to the server
     client.publish("/sensor", json.dumps(asdict(handPose)))
     print(handPose)
+
 
 class MyListener(leap.Listener):
     def on_connection_event(self, event):
@@ -110,8 +117,9 @@ def main():
         connection.set_tracking_mode(leap.TrackingMode.Desktop)
         while running:
             time.sleep(1)
-    
+
     client.disconnect()
+
 
 if __name__ == "__main__":
     main()
