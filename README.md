@@ -41,6 +41,11 @@ These nodes communicate through an MQTT server, which enables a decoupled archit
   - Run `uv run src/llsg/commander/audio.py` for the **commander** node responsible to listen to verbal cues
   - Run `uv run src/llsg/stimulator/stimulator.py` for the **stimulator** node responsible to send the electrical stimulation
 
+## Docker version
+Alternatively, you can run the complete software using docker.
+- Make sure you have docker installed: https://docs.docker.com/engine/install/
+- 
+
 # Hardware list
 
 ## Leap Motion Controller
