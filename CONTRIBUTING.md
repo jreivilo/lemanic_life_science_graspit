@@ -1,4 +1,4 @@
-# How to Contribute to DeepLabCut
+# How to Contribute to Grasp It
 
 Grasp It has been initially created during the Lemanice Life Science Hackathon 2025. It is a very new package and we welcome community development and involvement. Please get in touch if you want to discuss specific contributions you are interested in developing, and we can help shape a road-map.
 
