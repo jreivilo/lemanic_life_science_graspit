@@ -1,72 +1,142 @@
 from vosk import Model, KaldiRecognizer
 import sounddevice as sd
 import queue
+from collections import deque
 import threading
 import json
 import paho.mqtt.client as mqtt
+import difflib
+import time
 
-COMMANDS = ["grasp", "release"]
+COMMANDS = ["grasp", "release", "stop"]
 MQTT_TOPIC = "/command"
-CONFIDENCE_THRESHOLD = 0.3
 
-model = Model("vosk-model-small-en-us-0.15")
-recognizer = KaldiRecognizer(model, 16000, json.dumps(COMMANDS))
+#model = Model("vosk-model-small-en-us-0.15")
+model = Model("vosk-model-en-us-0.22")
+recognizer = KaldiRecognizer(model, 16000)
 audio_queue = queue.Queue()
-command_queue = queue.Queue()
+command_deque = deque()
 
+"""
+import noisereduce as nr
+import numpy as np
+
+SAMPLE_RATE = 16000
+NOISE_DURATION = 0.25 # seconds
+NOISE_SAMPLE_LENGTH = int(SAMPLE_RATE * NOISE_DURATION)
+
+noise_profile = []
+noise_sample_collected = False
+
+
+def audio_callback(indata, frames, time, status):
+    global noise_profile, noise_sample_collected
+
+    if status:
+        print(f"Audio status: {status}")
+
+    # Convert raw audio bytes to float32
+    raw = np.frombuffer(indata, dtype=np.int16).astype(np.float32)
+
+    # Step 1: collect noise sample
+    if not noise_sample_collected:
+        noise_profile.extend(raw)
+        if len(noise_profile) >= NOISE_SAMPLE_LENGTH:
+            noise_profile = np.array(noise_profile[:NOISE_SAMPLE_LENGTH])
+            noise_sample_collected = True
+            print("[INFO] Noise profile collected.")
+        return  # wait until profile collected before processing
+
+    # Step 2: denoise with the collected profile
+    denoised = nr.reduce_noise(y=raw, y_noise=noise_profile, sr=SAMPLE_RATE,
+                               stationary=True, prop_decrease=0.8)
+
+    # Convert back to int16 and enqueue
+    denoised_int16 = denoised.astype(np.int16).tobytes()
+    audio_queue.put(denoised_int16)"""
+
+
+"""def audio_callback(indata, frames, time, status):
+    if status:
+        print(f"Audio status: {status}")
+    raw = np.frombuffer(indata, dtype=np.int16).astype(np.float32)
+
+    # Apply noise reduction (assumes 1D mono audio)
+    reduced = nr.reduce_noise(y=raw, sr=16000)
+
+    # Convert back to int16 and enqueue
+    reduced_bytes = (reduced.astype(np.int16)).tobytes()
+    audio_queue.put(reduced_bytes)"""
 
 def audio_callback(indata, frames, time, status):
     if status:
         print(f"Audio status: {status}")
     audio_queue.put(bytes(indata))
 
-"""def voice_listener():
-    with sd.RawInputStream(samplerate=16000, blocksize=8000, dtype='int16',
-                           channels=1, callback=audio_callback):
-        while True:
-            data = audio_queue.get()
-            if recognizer.AcceptWaveform(data):
-                result = json.loads(recognizer.Result())
-                text = result.get("text", "").strip().lower()
-                if text in COMMANDS:
-                    dict = {}
-                    dict["action"] = str(text)
-                    res = json.dumps(dict)
-                    command_queue.put(res)"""
 
 def voice_listener():
-    with sd.RawInputStream(samplerate=16000, blocksize=8000, dtype='int16',
+    speech_timer = None
+    window_duration = 3  # seconds
+
+    with sd.RawInputStream(samplerate=16000, blocksize=2048, dtype='int16',
                            channels=1, callback=audio_callback):
         while True:
-            data = audio_queue.get()
-            if recognizer.AcceptWaveform(data):
-                result = json.loads(recognizer.Result())
-                text = result.get("text", "").strip().lower()
+            if recognizer.AcceptWaveform(audio_queue.get()):
+                speech_timer = None
+            
+            now = time.monotonic()
 
-                if text in COMMANDS:
-                    word_confs = [entry["conf"] for entry in result.get("result", []) if entry["word"] == text]
+            result = json.loads(recognizer.PartialResult())
+            text = result.get("partial", "").strip().lower()
 
-                    if word_confs:
-                        if min(word_confs) >= CONFIDENCE_THRESHOLD:
-                            payload = json.dumps({"action": text})
-                            command_queue.put(payload)
-                        else:
-                            print(f"Ignored '{text}' due to low confidence: {word_confs}")
-                    else:
-                        # No word-level confidence returned, fallback to trusting the grammar match
-                        print(f"No confidence info for '{text}', accepting based on grammar.")
-                        payload = json.dumps({"action": text})
-                        command_queue.put(payload)
+            # Start the timer if speech starts
+            if text and speech_timer is None:
+                speech_timer = now
+
+            # If inside the window and text is coming, try match commands
+            if speech_timer and text:
+                for word in text.split():
+                    best_match = difflib.get_close_matches(word, COMMANDS, n=1, cutoff=0.6)
+                    if best_match:
+                        cmd = best_match[0]
+                        if cmd == "grasp" or cmd == "release" or cmd == "stop":
+                            command_deque.append(cmd)
+                            break
+
+            # Reset recognizer after window duration
+            if speech_timer and now - speech_timer > window_duration:
+                recognizer.Reset()
+                speech_timer = None
+                continue
 
 
 threading.Thread(target=voice_listener, daemon=True).start()
 
 client = mqtt.Client()
 client.connect("cluster.jolivier.ch", 1883, 60)
-client.loop_start()  
+client.loop_start()
 
+now = 0
+state = 0
+last_command_time = 0
 print("Voice control system active.")
 while True:
-    command = command_queue.get()
-    print(f">>> {command.upper()} command received — publishing to MQTT.")
-    client.publish(MQTT_TOPIC, command)
+    if command_deque:
+        command = command_deque.pop()
+        now = time.monotonic()
+        if now - last_command_time >= 3:
+            if command == "grasp" and state == 0:
+                last_command_time = now
+                state = 1
+                print(f">>> {command.upper()} command received — publishing to MQTT.")
+                client.publish(MQTT_TOPIC, json.dumps({"action": command}))
+            elif command == "release" and state == 1:
+                last_command_time = now
+                state = 2
+                print(f">>> {command.upper()} command received — publishing to MQTT.")
+                client.publish(MQTT_TOPIC, json.dumps({"action": command}))
+            elif command == "stop" and state == 2:
+                last_command_time = now
+                state = 0
+                print(f">>> {command.upper()} command received — publishing to MQTT.")
+                client.publish(MQTT_TOPIC, json.dumps({"action": command}))
