@@ -9,6 +9,8 @@
 [💡 Demonstrations](#demonstrations) |
 [👨‍💻 Authors](AUTHORS)
 
+[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
+![Version](https://img.shields.io/badge/python_version-3.11-purple)
 [![GitHub stars](https://img.shields.io/github/stars/jreivilo/lemanic_life_science_graspit.svg?style=social&label=Star)](https://github.com/jreivilo/lemanic_life_science_graspit)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Generic badge](https://img.shields.io/badge/Contributions-Welcome-brightgreen.svg)](CONTRIBUTING.md)
