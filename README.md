@@ -66,10 +66,9 @@ We used those to learn more about the state of the art closed loop control of el
 
 # Demonstrations
 
-<img src="images/grasp.gif" width="600"/>
+<img src="images/grasp.gif" width="500"/>
 <br/>
-<img src="images/release.gif" width="600"/>
+<img src="images/release.gif" width="500"/>
 <br/>
-<img src="images/grasp_skeleton.gif" width="600"/>
-<br/>
-<img src="images/release_skeleton.gif" width="600"/>
+<img src="images/grasp_skeleton.gif" width="300"/>
+<img src="images/release_skeleton.gif" width="300"/>
