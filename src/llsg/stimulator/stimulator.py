@@ -35,6 +35,7 @@ class Stimulator:
         # Turn off all stimulation when object is destroyed
         stim_code = [0, 0, 0, 0, 0, 0, 0, 0]
         self.stim.UpdateChannelSettings(stim_code)
+        time.sleep(1)
         self.stim.CloseSerialPort()
         logger.info('Closed FES serial port')
     
