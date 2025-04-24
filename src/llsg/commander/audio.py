@@ -7,9 +7,26 @@ import json
 import paho.mqtt.client as mqtt
 import difflib
 import time
+import requests
+import os
+import zipfile
 
 COMMANDS = ["grasp", "release", "stop"]
 MQTT_TOPIC = "/command"
+
+# Check folder vosk if present and install when not present
+if not os.path.isdir("vosk-model-en-us-0.22"):
+    print("Vosk package not present ! \n\n")
+
+    #change link and unzip
+    url = 'https://alphacephei.com/vosk/models/vosk-model-en-us-0.22.zip'
+    print("Downloading....  \n\n")
+    r = requests.get(url, allow_redirects=True)
+    open('vosk-model-en-us-0.22.zip', 'wb').write(r.content)
+
+    with zipfile.ZipFile("vosk-model-en-us-0.22.zip", 'r') as zip_ref:
+        print("Unzipping vosk....  \n\n")
+        zip_ref.extractall()
 
 #model = Model("vosk-model-small-en-us-0.15")
 model = Model("vosk-model-en-us-0.22")
@@ -120,6 +137,8 @@ now = 0
 state = 0
 last_command_time = 0
 print("Voice control system active.")
+
+
 while True:
     if command_deque:
         command = command_deque.pop()
