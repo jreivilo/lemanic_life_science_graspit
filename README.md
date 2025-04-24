@@ -65,4 +65,7 @@ We used those to learn more about the state of the art closed loop control of el
 - Le Guillou, R., Froger, J., Morin, M. et al. Specifications and functional impact of a self-triggered grasp neuroprosthesis developed to restore prehension in hemiparetic post-stroke subjects. BioMed Eng OnLine 23, 129 (2024). https://doi.org/10.1186/s12938-024-01323-y
 
 # Demonstrations
-TODO add cool gifs
+
+<img src="images/grasp.gif" width="600"/>
+<br/>
+<img src="images/release.gif" width="600"/>
