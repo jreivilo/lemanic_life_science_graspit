@@ -246,11 +246,15 @@ def main():
             print(f"Error processing message: {e}")
 
     client = mqtt.Client()
+    mqtt_hostname = os.getenv("MQTT_HOSTNAME")
+    if mqtt_hostname is None:
+        mqtt_hostname = "localhost"
+
     client.on_connect = on_connect
     client.on_message = on_message
 
     try:
-        client.connect("cluster.jolivier.ch", 1883, 60)
+        client.connect(mqtt_hostname, 1883, 60)
         client.loop_forever()
     except KeyboardInterrupt:
         print("Stimulator stopped by user")
