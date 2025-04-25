@@ -10,6 +10,7 @@ import time
 import requests
 import os
 import zipfile
+import enum from Enum
 
 COMMANDS = ["grasp", "release", "stop"]
 MQTT_TOPIC = "/command"
@@ -27,6 +28,9 @@ if not os.path.isdir("vosk-model-en-us-0.22"):
     with zipfile.ZipFile("vosk-model-en-us-0.22.zip", 'r') as zip_ref:
         print("Unzipping vosk....  \n\n")
         zip_ref.extractall()
+        print("Deleting zip file....  \n\n")
+        os.remove("vosk-model-en-us-0.22.zip")
+    print("Vosk package installed ! \n\n")
 
 #model = Model("vosk-model-small-en-us-0.15")
 model = Model("vosk-model-en-us-0.22")
@@ -133,29 +137,35 @@ client = mqtt.Client()
 client.connect("cluster.jolivier.ch", 1883, 60)
 client.loop_start()
 
+class State(Enum):
+    STOP = 1
+    GRASP = 2
+    RELEASE = 3
+
 now = 0
-state = 0
+state = State.STOP # 0 = stop, 1 = release, 2 = grasp
 last_command_time = 0
 print("Voice control system active.")
-
 
 while True:
     if command_deque:
         command = command_deque.pop()
         now = time.monotonic()
         if now - last_command_time >= 3:
-            if command == "grasp" and state == 0:
+            newState = None
+
+            # State machine order: release -> grasp -> release -> grasp, etc.
+            # The "stop" command is a special case that resets the state
+            if command == "grasp" and (state == State.RELEASE or state == State.STOP):
+                newState = State.GRASP
+            elif command == "release" and (state == State.GRASP or state == State.STOP):
+                newState = State.RELEASE
+            elif command == "stop":
+                newState = State.STOP
+            
+            if newState is not None:
+                state = newState
+                print(f"State changed to: {state.name}")
                 last_command_time = now
-                state = 1
-                print(f">>> {command.upper()} command received — publishing to MQTT.")
-                client.publish(MQTT_TOPIC, json.dumps({"action": command}))
-            elif command == "release" and state == 1:
-                last_command_time = now
-                state = 2
-                print(f">>> {command.upper()} command received — publishing to MQTT.")
-                client.publish(MQTT_TOPIC, json.dumps({"action": command}))
-            elif command == "stop" and state == 2:
-                last_command_time = now
-                state = 0
                 print(f">>> {command.upper()} command received — publishing to MQTT.")
                 client.publish(MQTT_TOPIC, json.dumps({"action": command}))

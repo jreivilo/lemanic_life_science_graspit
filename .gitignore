@@ -3,3 +3,4 @@ __pycache__
 docker/data/mosquitto.db
 experiments/
 *.ipynb
+src/vosk-model-en-us-0.22
