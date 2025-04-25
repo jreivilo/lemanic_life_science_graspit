@@ -1,4 +1,9 @@
 version: "3.7"
+
+x-common-env: &common-env
+  environment:
+    MQTT_HOSTNAME: "mqtt5"
+
 services:
   # mqtt5 eclipse-mosquitto
   mqtt5:
@@ -20,6 +25,7 @@ services:
     devices:
       - "/dev/snd:/dev/snd"
     container_name: commander
+    <<: *common-env
   
   sensor:
     build: .
@@ -27,6 +33,7 @@ services:
       - mqtt5
     command: ["uv", "run", "/app/src/llsg/sensor/sensor.py"]
     container_name: sensor
+    <<: *common-env
   
   stimulator:
     build: .
@@ -34,6 +41,7 @@ services:
       - mqtt5
     command: ["uv", "run", "/app/src/llsg/stimulator/stimulator.py"]
     container_name: stimulator
+    <<: *common-env
 
 # volumes for mapping data,config and log
 volumes:
