@@ -134,7 +134,10 @@ def voice_listener():
 threading.Thread(target=voice_listener, daemon=True).start()
 
 client = mqtt.Client()
-client.connect("cluster.jolivier.ch", 1883, 60)
+mqtt_hostname = os.getenv("MQTT_HOSTNAME")
+if mqtt_hostname is None:
+    mqtt_hostname = "localhost"
+client.connect(mqtt_hostname, 1883, 60)
 client.loop_start()
 
 class State(Enum):

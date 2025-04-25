@@ -50,6 +50,19 @@ Alternatively, you can run the complete software using docker.
 - Go inside the docker directory with `cd docker`
 - Run all the nodes with `docker compose up`. It will download everything that is necessary.
 
+# 📦 Project structure
+Here are the most important folder/files of the project  
+```
+├── leapc-python-bindings/ (submodule of the leap controller driver)
+├── src/ (python source code)
+│   └── llsg/
+│       ├── sensor/ (code for the infrared camera)
+│       ├── commander/ (code for the voice recognition)
+│       └── stimulator/ (code for the controller and FES)
+├── android-app/ (prototype of a mobile app)
+└── run.sh/ (convinience script to run everyhing, linux only)
+```
+
 # 🧰 Hardware list
 
 ## 📷 Leap Motion Controller ~350$

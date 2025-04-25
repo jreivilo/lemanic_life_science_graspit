@@ -1,7 +1,7 @@
 import json
 import time
 from dataclasses import asdict
-
+import os
 import leap
 import numpy as np
 import paho.mqtt.client as mqtt
@@ -9,7 +9,9 @@ import paho.mqtt.client as mqtt
 from llsg.data_structure import HandPose
 
 client = mqtt.Client()
-
+mqtt_hostname = os.getenv("MQTT_HOSTNAME")
+if mqtt_hostname is None:
+    mqtt_hostname = "localhost"
 
 def quaternion_conjugate(q):
     """Returns the conjugate of a quaternion."""
@@ -98,7 +100,7 @@ class MyListener(leap.Listener):
 
 def main():
     # Init connection to MQTT server
-    client.connect("cluster.jolivier.ch", 1883, 60)
+    client.connect(mqtt_hostname, 1883, 60)
 
     my_listener = MyListener()
 
