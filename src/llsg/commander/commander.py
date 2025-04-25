@@ -10,7 +10,7 @@ import time
 import requests
 import os
 import zipfile
-import enum from Enum
+from enum import Enum
 
 COMMANDS = ["grasp", "release", "stop"]
 MQTT_TOPIC = "/command"
