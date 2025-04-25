@@ -48,12 +48,12 @@ Alternatively, you can run the complete software using docker.
 
 # Hardware list
 
-## Leap Motion Controller
+## Leap Motion Controller ~350$
 Infrared camera sensor with software drivers to detect bones position and orientation in the hand.
 
 <img src="images/Leap_Motion_Controller.jpg" width="250"/>
 
-## MotionStim 8
+## MotionStim 8 ~5000$ (very rough estimate !)
 FES device (Functional Electrical Stimulation) to trigger and control specific muscle movements by transcutaneous stimulation.
 
 <img src="images/MotionStim8.jpg" width="350"/>
