@@ -59,12 +59,6 @@ def send_data(hand):
     #     print(f"digit {i}")
     #     handPose["digits"].append([])
     #
-    #     # Add first orientation of the first bone of the finger
-    #     q1 = hand.palm.orientation
-    #     q2 = hand.digits[i].bones[0].rotation
-    #     qdiff = quaternion_difference(q1, q2)
-    #     handPose["digits"][i].append(qdiff)
-    #
     #     # Iterate every bones of the finger
     #     for j in range(len(hand.digits[i].bones) - 1):
     #         print(f"joint {j}")
