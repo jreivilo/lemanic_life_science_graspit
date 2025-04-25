@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Graspit</string>
+    <string name="welcome">Welcome to Graspit!</string>
+    <string name="image_desc">Image download</string>
+    <string name="delete_cache">Delete Cache</string>
+    <string name="press_the_button_and_speak_try_saying_the_word_grasp">Press the button and speak. Try saying the word \'grasp\'</string>
+    <string name="try_saying_grasp">Try saying: GRASP</string>
+</resources>
