@@ -38,7 +38,7 @@ These nodes communicate through an MQTT server, which enables a decoupled archit
 - Run `uv sync` to install all python packages
 - The 3 nodes must be run in parallel
   - Run `uv run src/llsg/sensor/sensor.py` for the **sensor** node responsible to read data from the infrared camera
-  - Run `uv run src/llsg/commander/audio.py` for the **commander** node responsible to listen to verbal cues
+  - Run `uv run src/llsg/commander/commander.py` for the **commander** node responsible to listen to verbal cues
   - Run `uv run src/llsg/stimulator/stimulator.py` for the **stimulator** node responsible to send the electrical stimulation
 
 ## Docker version
@@ -66,9 +66,8 @@ We used those to learn more about the state of the art closed loop control of el
 
 # Demonstrations
 
-<img src="images/grasp.gif" width="500"/>
+<img src="images/grasp.gif" width="400"/>
+<img src="images/grasp_skeleton.gif" width="200"/>
 <br/>
-<img src="images/release.gif" width="500"/>
-<br/>
-<img src="images/grasp_skeleton.gif" width="300"/>
-<img src="images/release_skeleton.gif" width="300"/>
+<img src="images/release.gif" width="400"/>
+<img src="images/release_skeleton.gif" width="200"/>
