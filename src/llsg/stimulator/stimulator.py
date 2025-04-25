@@ -10,6 +10,8 @@ import llsg.config as config
 import llsg.stimulator.driver as fes
 from llsg import logger
 
+subject = "Jo"
+
 
 class Stimulator:
     def __init__(self):
@@ -25,49 +27,57 @@ class Stimulator:
         self.previous_angle_timestamp = 0
         self.previous_intensity = 0
         self.is_rec = False
+        self.kp = 1
 
         # Command to channel mapping
         self.command_channel_map = {
             "grasp": [0],  # Channel 1 (index 0)
-            "release": [2],  # Channel 3 (index 2)
-            "calibration": [2],
+            "release": [3],  # Channel 4 (index 3)
+            "calibration_grasp": [0],
+            "calibration_release": [3],
         }
 
         # Current active command
         self.active_command = None
         self.error = 0
 
-        calibration_data = np.loadtxt("calibration_set_grasp.txt")
-        angles = calibration_data[:, 1]
-        currents = calibration_data[:, 0]
-        coeffs = np.polyfit(angles, currents, 1)
-        self.alpha_grasp, self.beta_grasp = coeffs
+        if os.path.exists(f"calibration/{subject}_calibration_grasp_set.txt"):
+            calibration_data = np.loadtxt(
+                f"calibration/{subject}_calibration_grasp_set.txt"
+            )
+            angles = calibration_data[:, 1]
+            currents = calibration_data[:, 0]
+            coeffs = np.polyfit(angles, currents, 1)
+            self.alpha_grasp, self.beta_grasp = coeffs
+            print(coeffs)
+        else:
+            self.alpha_grasp = 0
+            self.beta_grasp = 0
 
-        calibration_data = np.loadtxt("calibration_set_release.txt")
-        angles = calibration_data[:, 1]
-        currents = calibration_data[:, 0]
-        coeffs = np.polyfit(angles, currents, 1)
-        self.alpha_release, self.beta_release = coeffs
+        if os.path.exists(f"calibration/{subject}_calibration_release_set.txt"):
+            calibration_data = np.loadtxt(
+                f"calibration/{subject}_calibration_release_set.txt"
+            )
+            angles = calibration_data[:, 1]
+            currents = calibration_data[:, 0]
+            coeffs = np.polyfit(angles, currents, 1)
+            self.alpha_release, self.beta_release = coeffs
+        else:
+            self.alpha_release = 0
+            self.beta_release = 0
 
         self.calibration_intensities = [
             0,
             0,
-            5,
+            2,
+            0,
+            4,
             0,
             6,
-            0,
-            7,
             0,
             8,
             0,
             9,
-            0,
-            5,
-            6,
-            7,
-            8,
-            9,
-            0,
         ]
         self.intensity_idx = 0
         self.intensity = 0
@@ -102,7 +112,9 @@ class Stimulator:
         else:
             self.error = abs(self.objective_angle - self.current_angle)
 
-        intensity = self.previous_intensity + self.alpha * self.error + self.beta
+        intensity = (
+            self.previous_intensity + (self.alpha / self.kp) * self.error + self.beta
+        )
         self.previous_intensity = intensity
 
         # Ensure intensity is within valid range
@@ -138,15 +150,19 @@ class Stimulator:
             self.objective_angle = 1.57
             self.active_command = "pinch"
             logger.info("Command received: pinch - Setting objective angle to 1.57")
-        elif command == "calibration":
-            self.active_command = "calibration"
+        elif command in ["calibration_grasp", "calibration_release"]:
+            self.active_command = command
             logger.info("Calibration")
 
     def update_sensor_reading(self, angle, timestamp):
 
         # Only stimulate if we have an active command
         if self.active_command:
-            if self.active_command not in ["calibration", "stop"]:
+            if self.active_command not in [
+                "calibration_grasp",
+                "calibration_release",
+                "stop",
+            ]:
                 if timestamp - self.previous_angle_timestamp < 500:
                     # Ignore readings that are too close together
                     return
@@ -156,14 +172,16 @@ class Stimulator:
 
                 self.intensity = self.calculate_stimulation_intensity()
                 self.stimulate(self.intensity, self.active_command)
-            elif self.active_command == "calibration":
+            elif self.active_command in ["calibration_grasp", "calibration_release"]:
                 if (
-                    timestamp - self.previous_angle_timestamp < 2500
+                    timestamp - self.previous_angle_timestamp < 3000
                     or self.intensity_idx >= len(self.calibration_intensities) - 1
                 ):
                     # Ignore readings that are too close together
                     return
-                with open("calibration_set.txt", "a") as f:
+                with open(
+                    f"calibration/{subject}_{self.active_command}_set.txt", "a"
+                ) as f:
                     f.write(
                         f"{self.calibration_intensities[self.intensity_idx]} {angle} \n"
                     )
@@ -201,13 +219,19 @@ def main():
                     stimulator.update_sensor_reading(
                         payload["grasp_angle"], payload["timestamp_ms"]
                     )
-                    if stimulator.active_command == "calibration":
-                        with open("calibration.txt", "a") as f:
+                    if stimulator.active_command in [
+                        "calibration_grasp",
+                        "calibration_release",
+                    ]:
+                        with open(
+                            f"calibration/{subject}_{stimulator.active_command}.txt",
+                            "a",
+                        ) as f:
                             f.write(
                                 f"{stimulator.calibration_intensities[stimulator.intensity_idx]} {payload['grasp_angle']}\n"
                             )
                     else:
-                        with open("experiment_GR_7.txt", "a") as f:
+                        with open(f"calibration/{subject}_experiment.txt", "a") as f:
                             f.write(
                                 f"{stimulator.intensity} {payload['grasp_angle']} {stimulator.error}\n"
                             )
@@ -222,14 +246,11 @@ def main():
             print(f"Error processing message: {e}")
 
     client = mqtt.Client()
-    mqtt_hostname = os.getenv("MQTT_HOSTNAME")
-    if mqtt_hostname is None:
-        mqtt_hostname = "localhost"
     client.on_connect = on_connect
     client.on_message = on_message
 
     try:
-        client.connect(mqtt_hostname, 1883, 60)
+        client.connect("cluster.jolivier.ch", 1883, 60)
         client.loop_forever()
     except KeyboardInterrupt:
         print("Stimulator stopped by user")
