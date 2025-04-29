@@ -81,7 +81,7 @@ We used those to learn more about the state of the art closed loop control of el
 - C. Lin et al., "Adaptive Closed-Loop Functional Electrical Stimulation System with Visual Feedback for Enhanced Grasping in Neurological Impairments," in IEEE Transactions on Medical Robotics and Bionics, doi: 10.1109/TMRB.2025.3557197. keywords: {Hands;Grasping;Iron;Muscles;Real-time systems;Electrical stimulation;Biomimetics;Monitoring;Medical robotics;Visualization;Neuromuscular Electrical Stimulation;Closed-Loop Control;Visual Perception;Finite State Machine}, 
 - Le Guillou, R., Froger, J., Morin, M. et al. Specifications and functional impact of a self-triggered grasp neuroprosthesis developed to restore prehension in hemiparetic post-stroke subjects. BioMed Eng OnLine 23, 129 (2024). https://doi.org/10.1186/s12938-024-01323-y
 
-# 🎥 Demonstrations <a name="demonstration"></a>
+# 🎥 Demonstrations <a name="demonstrations"></a>
 
 
 <p align="center">
@@ -96,7 +96,8 @@ We used those to learn more about the state of the art closed loop control of el
 
 
 #👨‍💻 Authors <a name="authors"></a>
-GraspIt was initially developed during the Lemanic Life Science Hackathon 2025 at EPFL, Lausanne, Switzerland.
+
+GraspIt was initially developed during the [Lemanic Life Science Hackathon](https://web.archive.org/web/20250429112730/https://www.epfl.ch/schools/sv/lemanic-life-sciences-hackathon-2025/) 2025 at EPFL, Lausanne, Switzerland.
 
 Participants:
 Johan BENJELLOUN
