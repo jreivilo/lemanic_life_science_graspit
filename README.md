@@ -7,7 +7,7 @@
 [🛠️ Installation](#get-started) |
 [📚 Used references](#reference-papers) | 
 [🎥 Cool GIFs](#demonstrations) |
-[👨‍💻 Authors](AUTHORS)
+[👨‍💻 Authors](#authors)
 
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
 ![Version](https://img.shields.io/badge/python_version-3.11-purple)
@@ -31,7 +31,7 @@ The project is modular, structured into three main nodes:
 
 These nodes communicate through an MQTT server, which enables a decoupled architecture. This modularity not only enhances code clarity and maintainability but also supports parallel development by multiple contributors.
 
-# 🛠️ Get started
+# 🛠️ Get started <a name="get-started"></a>
 🐧 If you are on linux, you can run the `run.sh` script that will do all those steps for you and run everything.
 - Install driver for the leap motion controller: `https://leap2.ultraleap.com/downloads/leap-motion-controller/`
 - Make sure you have uv package manager installed https://docs.astral.sh/uv/getting-started/installation/
@@ -75,13 +75,13 @@ FES device (Functional Electrical Stimulation) to trigger and control specific m
 
 <img src="images/MotionStim8.jpg" width="350"/>
 
-# 📚 Reference papers
+# 📚 Reference papers <a name="reference-papers"></a>
 We used those to learn more about the state of the art closed loop control of eletrical stimulation for hand grasping.
 - Ciancibello, J., King, K., Meghrazi, M.A. et al. Closed-loop neuromuscular electrical stimulation using feedforward-feedback control and textile electrodes to regulate grasp force in quadriplegia. Bioelectron Med 5, 19 (2019). https://doi.org/10.1186/s42234-019-0034-y
 - C. Lin et al., "Adaptive Closed-Loop Functional Electrical Stimulation System with Visual Feedback for Enhanced Grasping in Neurological Impairments," in IEEE Transactions on Medical Robotics and Bionics, doi: 10.1109/TMRB.2025.3557197. keywords: {Hands;Grasping;Iron;Muscles;Real-time systems;Electrical stimulation;Biomimetics;Monitoring;Medical robotics;Visualization;Neuromuscular Electrical Stimulation;Closed-Loop Control;Visual Perception;Finite State Machine}, 
 - Le Guillou, R., Froger, J., Morin, M. et al. Specifications and functional impact of a self-triggered grasp neuroprosthesis developed to restore prehension in hemiparetic post-stroke subjects. BioMed Eng OnLine 23, 129 (2024). https://doi.org/10.1186/s12938-024-01323-y
 
-# 🎥 Demonstrations
+# 🎥 Demonstrations <a name="demonstration"></a>
 
 
 <p align="center">
@@ -95,3 +95,18 @@ We used those to learn more about the state of the art closed loop control of el
 </p>
 
 
+#👨‍💻 Authors <a name="authors"></a>
+GraspIt was initially developed during the Lemanic Life Science Hackathon 2025 at EPFL, Lausanne, Switzerland.
+
+Participants:
+Johan BENJELLOUN
+Glodi DOMINGOS
+Julie KIEFFER
+Jérémy OLIVIER
+Arash SAL MOSLEHIAN
+Milo SANDERS
+Leandro SARAIVA MAIA
+Bianca ZILIOTTO
+
+Mentor:
+Federico CIOTTI
