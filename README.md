@@ -100,14 +100,14 @@ We used those to learn more about the state of the art closed loop control of el
 GraspIt was initially developed during the [Lemanic Life Science Hackathon](https://web.archive.org/web/20250429112730/https://www.epfl.ch/schools/sv/lemanic-life-sciences-hackathon-2025/) 2025 at EPFL, Lausanne, Switzerland.
 
 Participants:
-Johan BENJELLOUN
-Glodi DOMINGOS
-Julie KIEFFER
-Jérémy OLIVIER
-Arash SAL MOSLEHIAN
-Milo SANDERS
-Leandro SARAIVA MAIA
-Bianca ZILIOTTO
+- Johan BENJELLOUN
+- Glodi DOMINGOS
+- Julie KIEFFER
+- Jérémy OLIVIER
+- Arash SAL MOSLEHIAN
+- Milo SANDERS
+- Leandro SARAIVA MAIA
+- Bianca ZILIOTTO
 
 Mentor:
-Federico CIOTTI
+- Federico CIOTTI
