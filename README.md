@@ -17,8 +17,10 @@
 
 </div>
 
+> Check out the [presentation](/presentation/GRASPIT-2025.pdf) for an overview of the project
+
 # 📄 Description of the project
-Grasp It is a Python-based software system designed to induce hand movements—specifically grasping—through Functional Electrical Stimulation (FES), without requiring voluntary muscle activation from the user. By applying electrical stimulation to targeted muscles, the system generates predefined movements in the arm.
+GraspIt is a Python-based software system designed to induce hand movements—specifically grasping—through Functional Electrical Stimulation (FES), without requiring voluntary muscle activation from the user. By applying electrical stimulation to targeted muscles, the system generates predefined movements in the arm.
 
 To ensure accurate and adaptive control, Grasp It incorporates a closed-loop feedback mechanism using an infrared camera. The camera continuously tracks the position and orientation of the hand’s bones, allowing the system to compute joint angles and determine the current state of the grasp. This feedback is compared against a target position, enabling real-time adjustment of the stimulation to achieve or maintain the desired hand posture.
 
